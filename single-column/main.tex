@@ -1,4 +1,4 @@
-% Single-column laboratory report template
+% Single-column laboratory report template (refined edition)
 % Adapted from original laboratory report layouts by Karol Cieślik (2017–2018).
 % The sample content and numerical values below are fictional.
 % Compile with pdfLaTeX + BibTeX, or use latexmk -pdf.
@@ -17,9 +17,18 @@
 \usepackage{pgfplots}
 \usepackage{natbib}
 \usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{caption}
 \usepackage[hidelinks]{hyperref}
 
 \pgfplotsset{compat=1.18}
+\definecolor{reportaccent}{HTML}{245473}
+\definecolor{reportmuted}{HTML}{647483}
+\colorlet{reportgrid}{black!12}
+\titleformat{\section}{\normalfont\Large\bfseries\color{reportaccent}}{\thesection}{0.7em}{}
+\titlespacing*{\section}{0pt}{2.2ex plus 0.8ex minus 0.3ex}{0.9ex}
+\captionsetup{font=small,labelfont={bf,color=reportaccent},skip=7pt}
 \setlength{\parindent}{0.4cm}
 \setlength{\parskip}{0.15em}
 \setlength{\headheight}{15pt}
@@ -31,15 +40,16 @@
 \newcommand{\reportauthor}{Student Name}
 \newcommand{\reportinstitution}{Institution or Laboratory Name}
 \newcommand{\reportcourse}{Course or Research Group}
+\newcommand{\reportsupervisor}{Supervisor Name}
 \newcommand{\reportdate}{\today}
 % -----------------------------------------------------------
 
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[L]{\small\scshape\reportshorttitle}
-\fancyhead[R]{\small\scshape\reportauthor}
+\fancyhead[L]{\small\color{reportmuted}\reportshorttitle}
+\fancyhead[R]{\small\color{reportmuted}\reportauthor}
 \fancyfoot[R]{\thepage}
-\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrulewidth}{0.3pt}
 
 \begin{document}
 % Avoid duplicate PDF page destinations when the page counter restarts
@@ -47,22 +57,23 @@
 \hypersetup{pageanchor=false}
 \begin{titlepage}
   \centering
-  \vspace*{2.2cm}
-  {\Large\scshape\reportinstitution\par}
+  \vspace*{2cm}
+  {\large\color{reportmuted}\scshape\reportinstitution\par}
+  \vspace{0.35cm}
+  {\normalsize\color{reportmuted}\reportcourse\par}
+  \vspace{2.7cm}
+  {\small\bfseries\color{reportaccent}\MakeUppercase{Laboratory Report}\par}
   \vspace{0.6cm}
-  {\large\reportcourse\par}
-  \vspace{2cm}
-  \rule{\textwidth}{0.5pt}\par
-  \vspace{0.5cm}
   {\Huge\bfseries\reporttitle\par}
-  \vspace{0.5cm}
-  \rule{\textwidth}{1.7pt}\par
-  \vspace{1.1cm}
-  {\Large Laboratory Report\par}
+  \vspace{0.8cm}
+  {\color{reportaccent}\rule{0.25\textwidth}{1.4pt}\par}
   \vfill
-  {\large\textbf{Author:} \reportauthor\par}
+  {\large\bfseries\reportauthor\par}
+  \vspace{0.35cm}
+  {\normalsize\color{reportmuted}Supervisor: \reportsupervisor\par}
   \vspace{0.5cm}
-  {\large\reportdate\par}
+  {\normalsize\reportdate\par}
+  \vspace{1.0cm}
 \end{titlepage}
 \hypersetup{pageanchor=true}
 
@@ -123,9 +134,9 @@ supported by the original measurement records.
 \end{table}
 
 Figure~\ref{fig:current-voltage} illustrates a compact plot generated directly
-in LaTeX. The solid line is an ideal reference curve, not a fit to real data.
+in LaTeX. The dashed line is an ideal reference curve, not a fit to real data;
+vertical error bars show the synthetic current uncertainties.
 
-\clearpage
 \begin{figure}[htbp]
     \centering
     \begin{tikzpicture}
@@ -137,15 +148,18 @@ in LaTeX. The solid line is an ideal reference curve, not a fit to real data.
             xmin=0, xmax=3.3,
             ymin=0, ymax=3.4,
             grid=major,
+            grid style={draw=reportgrid},
+            axis line style={draw=reportmuted},
+            tick style={draw=reportmuted},
             legend pos=north west,
-            legend style={font=\small},
+            legend style={font=\small,draw=none,fill=white,fill opacity=0.9,text opacity=1},
         ]
-            \addplot+[only marks, mark=*] coordinates {
-                (0.50,0.50) (1.00,1.01) (1.50,1.49)
-                (2.00,2.02) (2.50,2.49) (3.00,3.01)
+            \addplot+[only marks, mark=*,mark size=2pt,color=reportaccent,error bars/.cd,y dir=both,y explicit] coordinates {
+                (0.50,0.50) +- (0,0.03) (1.00,1.01) +- (0,0.03) (1.50,1.49) +- (0,0.03)
+                (2.00,2.02) +- (0,0.03) (2.50,2.49) +- (0,0.03) (3.00,3.01) +- (0,0.03)
             };
             \addlegendentry{Synthetic observations}
-            \addplot+[no marks, domain=0:3.2, samples=2] {x};
+            \addplot+[no marks, thick, dashed, color=reportmuted, domain=0:3.2, samples=2] {x};
             \addlegendentry{Ideal reference}
         \end{axis}
     \end{tikzpicture}
