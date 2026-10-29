@@ -21,7 +21,7 @@ university logos in the published templates.
    locally using the commands below.
 3. Edit the metadata commands near the beginning of `main.tex`:
    `\reporttitle`, `\reportauthor`, `\reportinstitution`, `\reportcourse`,
-   and `\reportdate`.
+   `\reportsupervisor`, and `\reportdate`.
 4. Replace the example sections, table and graph with your own work.
 
 These are standalone examples. Neither depends on files in the other folder.
@@ -50,9 +50,15 @@ latexmk -pdf main.tex
 
 The sample report describes an elementary Ohm's-law experiment, **solely to
 demonstrate the layout**. Every numerical measurement is fictional. The chart
-is drawn directly by PGFPlots, so no external image files or image rights are
+includes illustrative vertical uncertainty bars (also fictional) and is drawn
+directly by PGFPlots, so no external image files or image rights are
 involved. The bibliography contains only a bibliographic reference, not a
 copy of the cited work.
+
+Both versions share restrained blue-grey section headings, captions, a matched
+cover design, and plot styling. Change `reportaccent` and `reportmuted` in the
+preamble to customise the colour scheme. The two-column template uses 10 pt
+body text to maintain readable line lengths in its narrower columns.
 
 The single-column layout gives figures and explanatory text more space.
 The double-column layout is more compact and includes an optional, commented
